@@ -2,8 +2,8 @@ import { ButtonProps } from "./types"
 
 
 
-export const Button = ({title}:ButtonProps) => {
+export const Button = ({title, onClick}:ButtonProps) => {
     return (
-        <button>{title}</button>
+        <button onClick={onClick}>{title}</button>
     )
 }
