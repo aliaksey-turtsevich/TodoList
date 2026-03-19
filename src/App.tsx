@@ -1,8 +1,8 @@
 import { useState } from 'react'
 import './App.css'
 import { TodoListItem } from './TodolistItem'
-import { Task } from './types'
-import { TodoFilterButton } from './enum'
+import { FilterValue, Task } from './types'
+import { v1 } from 'uuid'
 
 
 
@@ -11,38 +11,51 @@ import { TodoFilterButton } from './enum'
 export const App = () => {
   const date: Date = new Date()
   const ruDate: string = date.toLocaleDateString('ru-RU')
-  const [filter, setFilter] = useState<TodoFilterButton>(TodoFilterButton.ALL)
+  const [filter, setFilter] = useState<FilterValue>('all')
 
-  const changeFilter = (filter: TodoFilterButton) => {
-    setFilter(filter)
-  }
   const [tasks, setTasks] = useState<Task[]>([
-    { id: 1, title: 'HTML&CSS', isDone: true },
-    { id: 2, title: 'JS', isDone: true },
-    { id: 3, title: 'ReactJS', isDone: false },
-    { id: 4, title: 'Redux', isDone: false },
-    { id: 5, title: 'Typescript', isDone: false },
-    { id: 6, title: 'RTK query', isDone: false },
+    { id: v1(), title: 'HTML&CSS', isDone: true },
+    { id: v1(), title: 'JS', isDone: true },
+    { id: v1(), title: 'ReactJS', isDone: false },
+    { id: v1(), title: 'Redux', isDone: false },
+    { id: v1(), title: 'Typescript', isDone: false },
+    { id: v1(), title: 'RTK query', isDone: false },
   ])
 
+  const createTask = (title: string) => {
+    const newTask = { id: v1(), title, isDone: false }
+    const newTasks = [newTask, ...tasks]
+    setTasks(newTasks)
+  }
+
+  const changeFilter = (filter: FilterValue) => {
+    setFilter(filter)
+  }
+
   let filteredTasks = tasks
-  if (filter === TodoFilterButton.COMPLETED) {
+  if (filter === 'completed') {
     filteredTasks = tasks.filter(el => el.isDone)
   }
-  if (filter === TodoFilterButton.ACTIVE) {
+  if (filter === 'active') {
     filteredTasks = tasks.filter(el => !el.isDone)
   }
   const deleteAllTasks = () => {
     setTasks([])
   }
-  const deleteTask = (taskId: number) => {
+  const deleteTask = (taskId: string) => {
     const filtredTasks = tasks.filter(el => el.id !== taskId)
     setTasks(filtredTasks)
   }
 
   return (
     <div className="app">
-      <TodoListItem title={'What to learn'} tasks={filteredTasks} date={ruDate} deleteTask={deleteTask} changeFilter={changeFilter} deleteAllTasks={deleteAllTasks}/>
+      <TodoListItem title={'What to learn'}
+        tasks={filteredTasks}
+        date={ruDate} deleteTask={deleteTask}
+        changeFilter={changeFilter}
+        deleteAllTasks={deleteAllTasks}
+        createTask={createTask}
+      />
     </div>
   )
 }
