@@ -13,6 +13,16 @@ export const App = () => {
   const ruDate: string = date.toLocaleDateString('ru-RU')
   const [filter, setFilter] = useState<FilterValue>('all')
 
+  const changeTaskStatus = (taskId: string, isDone: boolean) => {
+     const task = tasks.find(t=> t.id === taskId) 
+      if (task) {
+        task.isDone = isDone
+      }
+     setTasks([...tasks])  
+    // const newState = tasks.map(el => el.id === taskId ? { ...el, isDone } : el)
+    // setTasks(newState)
+  }
+
   const [tasks, setTasks] = useState<Task[]>([
     { id: v1(), title: 'HTML&CSS', isDone: true },
     { id: v1(), title: 'JS', isDone: true },
@@ -41,6 +51,7 @@ export const App = () => {
   }
   const deleteAllTasks = () => {
     setTasks([])
+    setFilter('all')
   }
   const deleteTask = (taskId: string) => {
     const filtredTasks = tasks.filter(el => el.id !== taskId)
@@ -55,6 +66,8 @@ export const App = () => {
         changeFilter={changeFilter}
         deleteAllTasks={deleteAllTasks}
         createTask={createTask}
+        changeTaskStatus={changeTaskStatus}
+        filterValue={filter}
       />
     </div>
   )
