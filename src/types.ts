@@ -1,3 +1,5 @@
+import { CreateItemForm } from "./CreateItemForm"
+
 export type TodolistItemData = {
     todoList: TodoList
     tasks: Task[]
@@ -7,6 +9,8 @@ export type TodolistItemData = {
     changeFilter?: (todoListId: string, filter: FilterValues) => void
     createTask?: (todoListId: string, title: string) => void
     changeTaskStatus?: (todoListId: string, taskId: string, isDone: boolean) => void
+    changeTaskTitle: (todolistId: string, taskId: string, title: string) => void
+    changeTodolistTitle: (todolistId: string, title: string) => void
 }
 
 export type Task = {
@@ -32,3 +36,12 @@ export type TodoList = {
 }
 
 export type FilterValues = "all" | 'active' | 'completed'
+
+export type CreateItemFormProps = {
+    onCreateItem: (title: string) => void
+}
+
+export type EditableSpanProps = {
+  value: string
+  onChange: (title: string) => void
+}
