@@ -1,41 +1,51 @@
-import {type ChangeEvent, type KeyboardEvent, useState} from 'react'
-import {Button} from './Button'
+import { type ChangeEvent, type KeyboardEvent, useState } from 'react'
 import { CreateItemFormProps } from './types'
- 
+import Button from '@mui/material/Button'
+import TextField from '@mui/material/TextField'
+import AddBoxIcon from '@mui/icons-material/AddBox'
+import IconButton from '@mui/material/IconButton'
+
 
 export const CreateItemForm = ({ onCreateItem }: CreateItemFormProps) => {
-  const [title, setTitle] = useState('')
-  const [error, setError] = useState<string | null>(null)
- 
-  const createItemHandler = () => {
-    const trimmedTitle = title.trim()
-    if (trimmedTitle !== '') {
-      onCreateItem(trimmedTitle)
-      setTitle('')
-    } else {
-      setError('Title is required')
+    const [title, setTitle] = useState('')
+    const [error, setError] = useState<string | null>(null)
+
+    const createItemHandler = () => {
+        const trimmedTitle = title.trim()
+        if (trimmedTitle !== '') {
+            onCreateItem(trimmedTitle)
+            setTitle('')
+        } else {
+            setError('Title is required')
+        }
     }
-  }
- 
-  const changeItemTitleHandler = (event: ChangeEvent<HTMLInputElement>) => {
-    setTitle(event.currentTarget.value)
-    setError(null)
-  }
- 
-  const createItemOnEnterHandler = (event: KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === 'Enter') {
-      createItemHandler()
+
+    const changeItemTitleHandler = (event: ChangeEvent<HTMLInputElement>) => {
+        setTitle(event.currentTarget.value)
+        setError(null)
     }
-  }
- 
-  return (
-      <div>
-        <input className={error ? 'error' : ''}
-               value={title}
-               onChange={changeItemTitleHandler}
-               onKeyDown={createItemOnEnterHandler}/>
-        <Button title={'+'} onClick={createItemHandler} />
-        {error && <div className={'error-message'}>{error}</div>}
-      </div>
-  )
+
+    const createItemOnEnterHandler = (event: KeyboardEvent<HTMLInputElement>) => {
+        if (event.key === 'Enter') {
+            createItemHandler()
+        }
+    }
+
+    return (
+        <div>
+            <TextField
+                label={'Enter a title'}
+                variant={'outlined'}
+                error={!!error}
+                helperText={error}
+                value={title}
+                size={'small'}
+                onChange={changeItemTitleHandler}
+                onKeyDown={createItemOnEnterHandler} />
+            <IconButton onClick={createItemHandler} color={'primary'}>
+                <AddBoxIcon />
+            </IconButton>
+            {error && <div className={'error-message'}>{error}</div>}
+        </div>
+    )
 }
